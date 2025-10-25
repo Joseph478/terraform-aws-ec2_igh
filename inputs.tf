@@ -77,3 +77,60 @@ variable "bucket_name" {
     description = "Type of project"
     type = string
 }
+
+# Variables de user_data
+variable "user_data" {
+    description = "User data to provide when launching the instance"
+    type        = string
+    default     = null
+}
+
+variable "user_data_base64" {
+    description = "Can be used instead of user_data to pass base64-encoded binary data directly"
+    type        = string
+    default     = null
+}
+
+variable "user_data_replace_on_change" {
+    description = "When used in combination with user_data or user_data_base64 will trigger a destroy and recreate when set to true"
+    type        = bool
+    default     = null
+}
+
+# Variables para el despliegue de Laravel
+variable "domain" {
+    description = "Dominio para la aplicación Laravel"
+    type        = string
+    default     = null
+}
+
+variable "repo_url" {
+    description = "URL del repositorio Git"
+    type        = string
+    default     = null
+}
+
+variable "db_name" {
+    description = "Nombre de la base de datos"
+    type        = string
+    default     = "cv_db_laravel"
+}
+
+variable "db_user" {
+    description = "Usuario de la base de datos"
+    type        = string
+    default     = "laravel_user"
+}
+
+variable "db_password" {
+    description = "Contraseña de la base de datos"
+    type        = string
+    default     = null
+    sensitive   = true
+}
+
+variable "user_data" {
+    description = "Script de user data para la instancia EC2"
+    type        = string
+    default     = null
+}
