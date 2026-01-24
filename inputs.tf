@@ -128,9 +128,3 @@ variable "db_password" {
     default     = null
     sensitive   = true
 }
-
-variable "user_data" {
-    description = "Script de user data para la instancia EC2"
-    type        = string
-    default     = null
-}
