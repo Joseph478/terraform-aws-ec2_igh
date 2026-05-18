@@ -68,9 +68,9 @@ resource "aws_security_group" "security_group_ec2" {
         ipv6_cidr_blocks = ["::/0"]
     }
 
-    tags = {
-        Name = "security_group_ec2"
-    }
+    tags = merge(var.tags, {
+        Name = "security_group_ec2_${var.name_main}"
+    })
 }
 
 # resource "aws_iam_role" "iam_role_instance_ec2" {
@@ -248,13 +248,15 @@ resource "aws_instance" "this" {
     #     delete = try(var.timeouts.delete, null)
     # }
 
-    tags        = merge({ "Name" = "instance_${var.name_main}" }, var.instance_tags)
+    tags        = merge(var.tags, { "Name" = "instance_${var.name_main}" }, var.instance_tags)
     # volume_tags = var.enable_volume_tags ? merge({ "Name" = var.name }, var.volume_tags) : null
 }
 
 resource "aws_eip" "eip" {
     instance = aws_instance.this.id
     domain   = "vpc"
+
+    tags = var.tags
 }
 
 resource "aws_cloudwatch_metric_alarm" "foobar" {
@@ -275,12 +277,16 @@ resource "aws_cloudwatch_metric_alarm" "foobar" {
         "arn:aws:sns:us-east-1:348484763444:CPU_LIMIT_EC2_ALARM",
         "arn:aws:automate:us-east-1:ec2:reboot"
     ]
+
+    tags = var.tags
 }
 
 resource "aws_s3_bucket" "codepipeline_bucket" {
     bucket = var.bucket_name
     # pasarlo a var
     force_destroy = true
+
+    tags = var.tags
 }
 resource "aws_s3_bucket_ownership_controls" "codepipeline_ownership_controls" {
     bucket = aws_s3_bucket.codepipeline_bucket.id
